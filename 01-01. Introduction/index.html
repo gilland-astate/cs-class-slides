@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+    <link rel="stylesheet" href="./css/local.css" />
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="https://gilland-astate.github.io/cs2124-slides/assets/images/State Building.jpg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 150px 0  150px 100px; box-sizing: border-box; border: 10px solid black; position: absolute; left: 50%; top: 20%; height: 50%; width: 60%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<div class="block">
+
+# Introduction to Operating Systems
+</div>
+
+
+
+
+
+
+
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Definition and Purpose
+</div>
+
+
+</div>
+
+
+
+- **Operating System (OS):** Software that manages the computer's hardware resources.
+- **Key Functions:**
+    - Simplifies running programs.
+    - Manages memory sharing.
+    - Facilitates interaction with devices.
+    - Ensures efficient and correct system operations.
+- **Von Neumann Model:** Fetch, decode, execute
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Virtualization and the Role of OS
+</div>
+
+
+</div>
+
+
+
+- **Virtualization:**
+	- **Concept:** The OS virtualizes physical resources (CPU, memory, disk) into more powerful, easy-to-use virtual resources.
+	- **APIs**
+- **Role of OS:**
+	- Manages resources.
+	- Ensures efficient resource sharing.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Virtualizing the CPU
+</div>
+
+
+</div>
+
+
+
+- **Running Multiple Programs Simultaneously:**
+- **Virtualization:**
+	- **Context Switching**
+- **Interfaces (APIs):** starting, stopping, manage
+- **OS Policies:** Decide which programs run at any given time, governed by policies.
+- The OS acts as a resource manager, handling CPU time, memory, and other resources. Ensures **Efficient Allocation**.
+- **Key Questions:**
+	- How does the OS decide which program to run?
+	- How does the OS ensure efficient use of resources?
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Virtualizing Memory
+</div>
+
+
+</div>
+
+
+
+- **Memory as an Array:** Physical memory structured as a simple array of bytes.
+- **Memory Access:** Programs constantly access memory.
+- **Virtual Address Space:** The OS virtualizes memory, providing private address space.
+- **Private Memory:** Each running program believes it has exclusive access to its memory.
+- **OS Role:**
+	- The OS maps each process's virtual address space to physical memory.
+	- This ensures that memory references in one process do not interfere with others.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Memory Allocation)
+</div>
+
+
+</div>
+
+
+
+
+```c
+#include <unistd.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include "common.h"
+
+int main(int argc, char *argv[]) { 
+	int *p = malloc(sizeof(int));
+	assert(p != NULL);
+	printf("(%d) address pointed to by p: %p\n", getpid(), p);
+	*p = 0;
+	while (1) { 
+		Spin(1);
+		*p = *p + 1;
+		printf("(%d) p: %d\n", getpid(), *p);
+	}
+	
+	return 0;
+}
+```
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Memory Allocation) cont'd
+</div>
+
+
+</div>
+
+
+
+
+```bash
+prompt> ./mem 
+(2134) address pointed to by p: 0x200000 
+(2134) p: 1 
+(2134) p: 2 
+(2134) p: 3 
+(2134) p: 4 
+(2134) p: 5 
+ˆC
+```
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Memory Allocation) cont'd
+</div>
+
+
+</div>
+
+
+
+
+```bash
+prompt> ./mem & ./mem & 
+[1] 24113 
+[2] 24114 
+(24113) address pointed to by p: 0x200000 
+(24114) address pointed to by p: 0x200000 
+(24113) p: 1 
+(24114) p: 1 
+(24114) p: 2 
+(24113) p: 2 
+(24113) p: 3 
+(24114) p: 3 
+(24113) p: 4 
+(24114) p: 4 
+...
+```
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Introduction to Concurrency
+</div>
+
+
+</div>
+
+
+
+
+- **Concurrency** refers to the challenges that arise when multiple tasks are executed simultaneously within the same program.
+- **Relevance:** 
+	- Initially observed mainly within operating systems.
+	- Concurrency issues are now prevalent in most modern problems.
+- Understanding concurrency is essential for developing robust, reliable software in modern multi-threaded environments.
+-  **Race Conditions:** Non-atomic steps can lead to race conditions.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Multi-threaded Program)
+</div>
+
+
+</div>
+
+
+
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include "common.h"
+#include "common_threads.h"
+
+volatile int counter = 0;
+int loops;
+
+void *worker(void *arg) { 
+	int i;
+	for (i = 0; i < loops; i++) { counter++; } 
+	return NULL;
+}
+
+int main(int argc, char *argv[]) { 
+	if (argc != 2) { 
+		fprintf(stderr, "usage: threads <value>\n");
+		exit(1);
+	}
+	loops = atoi(argv[1]);
+	pthread_t p1, p2;
+	printf("Initial value : %d\n", counter);
+	
+	Pthread_create(&p1, NULL, worker, NULL);
+	Pthread_create(&p2, NULL, worker, NULL);
+	Pthread_join(p1, NULL);
+	Pthread_join(p2, NULL);
+	
+	printf("Final value : %d\n", counter);
+	return 0;
+}
+```
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Multi-threaded Program) cont'd
+</div>
+
+
+</div>
+
+
+
+```bash
+prompt> gcc -o threads threads.c -Wall -pthread 
+prompt> ./threads 1000 
+Initial value : 0 
+Final value : 2000
+```
+
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Example Program (Multi-threaded Program) cont'd
+</div>
+
+
+</div>
+
+
+
+```bash
+prompt> ./threads 100000 
+Initial value : 0 
+Final value : 143012 // huh?? 
+
+prompt> ./threads 100000 
+Initial value : 0 
+Final value : 137298 // what the??
+```
+
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Introduction to Persistence
+</div>
+
+
+</div>
+
+
+
+- **Persistence** is the ability to store data in a way that survives system crashes or power losses.
+- Volatile memory loses data when power is lost vs Persistent storage ensures data longevity.
+- The **file system** manages data storage on these devices.
+- Unlike CPU and memory, the OS does not provide a private virtualized disk for each application.
+- **I/O Requests:** Involves complex I/O requests requiring deep knowledge of devices.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Key Goals in OS Design
+</div>
+
+
+</div>
+
+
+
+- **Abstraction:** Simplifies complex systems into manageable pieces, enabling high-level development.
+- **Performance:** Balances resource demands to minimize overheads and ensure efficiency.
+- **Protection:** Isolates applications to prevent interference and safeguards the OS from failures.
+- **Reliability:** Ensures continuous operation; critical for system stability.
+- **Additional Considerations**
+	- **Energy Efficiency:** Important for sustainability.
+	- **Security:** Protects against malicious attacks.
+	- **Mobility:** Adapts design for portable devices.
+	- **Adaptability:** Principles apply across different devices.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+Evolution of Operating Systems
+</div>
+
+
+</div>
+
+
+
+- **Early Operating Systems: Just Libraries**
+    - Early OSes were libraries of functions, providing APIs for low-level I/O handling.
+	- **Batch Processing:** Mainframes ran one program at a time, managed by operators, with jobs executed in batches.
+- **Evolution Beyond Libraries: Protection**
+    - OS code needed special privileges for secure hardware management.
+	- **System Calls:** Transition from user mode to kernel mode for critical tasks, ensuring secure operations.
+- **The Era of Multiprogramming**
+	- **Minicomputers:** Affordable, accessible computing (e.g., PDP series) led to multiprogramming, optimizing CPU usage.
+    - Memory protection and correct handling of concurrency were essential for stability.
+
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 540px; width: 960px; min-height: 540px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #cc092f; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ <div class="block">
+
+The Modern Era of Operating Systems
+</div>
+
+
+</div>
+
+
+
+- **UNIX Operating System**
+    - Developed by Ken Thompson and Dennis Ritchie, UNIX’s modularity and simplicity influenced modern OS design.
+- **PC Revolution**
+	- **Early PCs:** DOS and early Mac OS lacked features like memory protection, leading to instability.
+	- **Reintroduction of Advanced Features:**
+	    - **macOS (formerly Mac OS X):** Built on UNIX, incorporating its robust features.
+	    - **Windows NT:** Significant advancement in Microsoft’s OS, adopting advanced concepts.
+- **Modern Mobile and Embedded Systems**
+	- Today mobile devices are more similar to minicomputer systems reflecting the enduring value of foundational OS principles.
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### Arkansas State University - Computer Science Department <!-- .element: style="color: #00CCFF!important; font-family: 'JuliaMono', monospace; font-size: 12px" -->
+</div>
+</div></script></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":"960","height":"540","margin":"0","maxScale":"20.0","controls":true,"progress":true,"slideNumber":true,"center":"false","transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
